@@ -2,6 +2,7 @@
 import requests
 from .exc import RajaOngkirExc
 
+
 class HttpClient(object):
     """HttpClient for RajaOngkir"""
 
@@ -17,7 +18,7 @@ class HttpClient(object):
 
     API_URL = None
 
-    def __init__(self, apikey, account_type = 'starter', endpoint = None):
+    def __init__(self, apikey, account_type='starter', endpoint=None):
         self.API_KEY = apikey
         self.ENDPOINT = endpoint
 
@@ -43,8 +44,16 @@ class HttpClient(object):
     def endpoint(self, value):
         self.ENDPOINT = value
 
-    def get(self, query=[], endpoint=None):
-        """Perform GET Request"""
+    def get(self, query=None, endpoint=None):
+        """Perform GET Request
+
+        :param query: body of request
+        :param endpoint: destination URL
+        :return: HTTP response
+        """
+        if not query:
+            query = []
+
         self.ENDPOINT = endpoint or self.ENDPOINT
         if not self.ENDPOINT:
             raise RajaOngkirExc("Endpoint is Missing")
@@ -56,10 +65,19 @@ class HttpClient(object):
         return requests.get(
             url,
             params=query,
-            headers=self._genHeader()
+            headers=self._gen_header()
         )
 
-    def post(self, form={}, endpoint=None):
+    def post(self, form=None, endpoint=None):
+        """Perform a HTTP POST request
+
+        :param form: body of request
+        :param endpoint: destination URL
+        :return: HTTP response
+        """
+        if not form:
+            form = {}
+
         self.ENDPOINT = endpoint or self.ENDPOINT
         if not self.ENDPOINT:
             raise RajaOngkirExc("Endpoint is Missing")
@@ -74,10 +92,10 @@ class HttpClient(object):
         return requests.post(
             url,
             data=form,
-            headers=self._genHeader(post=True)
+            headers=self._gen_header(post=True)
         )
 
-    def _genHeader(self, post=False):
+    def _gen_header(self, post=False):
         h = {
             'key': self.API_KEY
         }

@@ -8,7 +8,13 @@ from exc import RajaOngkirExc
 _SUPPORTED_TYPE = ['city', 'subdistrict']
 _SUPPORTED_COURIER = ['jne', 'pos', 'tiki', 'rpx', 'esl', 'pcp']
 
+
 def cost(**kwargs):
+    """Build payload for cost request
+
+    :return: payload
+    :rtype: dict
+    """
     origin = kwargs.get('origin')
     destination = kwargs.get('destination')
     weight = kwargs.get('weight')
@@ -17,7 +23,7 @@ def cost(**kwargs):
     if not origin or not destination or not weight:
         raise RajaOngkirExc("Mandatory Parameter is Missing.")
 
-     #: check courier
+        #: check courier
     if courier not in _SUPPORTED_COURIER:
         raise RajaOngkirExc(
             "Invalid Courier Code: {0}. Available: {1}".format(
@@ -35,8 +41,13 @@ def cost(**kwargs):
 
     return payload
 
-def cost_pro(**kwargs):
 
+def cost_pro(**kwargs):
+    """Build Payload for Cost Request Pro.
+
+    :return: payload
+    :rtype: dict
+    """
     payload = cost(**kwargs)
 
     origin_type = kwargs.get('originType', 'city')
